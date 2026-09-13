@@ -42,7 +42,8 @@ jobs:
         run: |
           chmod +x scripts/bootstrap_keycloak.sh
           ./scripts/bootstrap_keycloak.sh > /tmp/bootstrap.env
-          cat /tmp/bootstrap.env >> "$GITHUB_ENV"
+          # Convert `export NAME='value'` lines into GITHUB_ENV's NAME=value format.
+          sed -n "s/^export \([A-Z_]*\)='\(.*\)'$/\1=\2/p" /tmp/bootstrap.env >> "$GITHUB_ENV"
         env:
           KEYCLOAK_URL: http://localhost:8080
 
