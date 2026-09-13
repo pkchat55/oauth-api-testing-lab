@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Start Keycloak
+        run: |
+          docker run -d --name keycloak -p 8080:8080 \
+            -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
+            -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin \
+            quay.io/keycloak/keycloak:26.7.3 start-dev
+
+      - name: Install API dependencies
+        run: pip install -r api/requirements.txt
+
+      - name: Lint API with py_compile
+        run: python -m py_compile api/app.py
+
+      - name: Wait for Keycloak and bootstrap realm/clients
+        run: |
+          chmod +x scripts/bootstrap_keycloak.sh
+          ./scripts/bootstrap_keycloak.sh > /tmp/bootstrap.env
+          cat /tmp/bootstrap.env >> "$GITHUB_ENV"
+        env:
+          KEYCLOAK_URL: http://localhost:8080
+
+      - name: Start FastAPI app
+        run: |
+          nohup uvicorn app:app --port 8000 --app-dir api > /tmp/uvicorn.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:8000/docs > /dev/null && break
+            sleep 1
+          done
+
+      - name: Run Rest Assured test suite
+        working-directory: rest-assured
+        run: mvn -B -q test
+
+      - name: Upload API logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: uvicorn-logs
+          path: /tmp/uvicorn.log

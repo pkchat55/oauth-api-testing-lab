@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OAuth 2.0 API Testing Lab — Execution Report</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #ffffff;
+    --accent: #2563eb;
+    --green: #16a34a;
+    --red: #dc2626;
+    --amber: #d97706;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 260px, #f1f5f9 260px);
+    color: var(--text);
+  }
+  header {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 48px 24px 24px;
+    color: #f8fafc;
+  }
+  header .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-size: 12px;
+    color: #93c5fd;
+    font-weight: 600;
+  }
+  header h1 {
+    margin: 8px 0 6px;
+    font-size: 32px;
+  }
+  header p.subtitle {
+    color: #cbd5e1;
+    margin: 0;
+    font-size: 15px;
+  }
+  .badges {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .badge {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    color: #e2e8f0;
+  }
+  .badge.pass {
+    background: rgba(22,163,74,0.18);
+    border-color: rgba(22,163,74,0.5);
+    color: #86efac;
+  }
+  main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 24px 64px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 30px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .card h2 {
+    margin-top: 0;
+    font-size: 19px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card h2 .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-top: 12px;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    background: #f8fafc;
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  tr:last-child td { border-bottom: none; }
+  code, .mono {
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: 13px;
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 16px 18px;
+    border-radius: 10px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  pre code { background: none; padding: 0; color: inherit; }
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 3px 10px;
+    border-radius: 6px;
+  }
+  .status.pass { background: rgba(22,163,74,0.12); color: var(--green); }
+  .status.done { background: rgba(37,99,235,0.12); color: var(--accent); }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: currentColor;
+    display: inline-block;
+  }
+  ul.checklist { list-style: none; margin: 12px 0 0; padding: 0; }
+  ul.checklist li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 14px;
+  }
+  ul.checklist li:last-child { border-bottom: none; }
+  ul.checklist li .tick {
+    color: var(--green);
+    font-weight: 700;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 680px) {
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+  .kv { font-size: 14px; }
+  .kv div { margin-bottom: 6px; }
+  .kv b { color: var(--muted); font-weight: 600; }
+  footer {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 24px 40px;
+    color: var(--muted);
+    font-size: 12.5px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Automation Report</div>
+  <h1>OAuth 2.0 API Testing Lab</h1>
+  <p class="subtitle">Keycloak &bull; FastAPI &bull; Postman &bull; Rest Assured — full run report, generated 2026-09-13</p>
+  <div class="badges">
+    <span class="badge pass">8 / 8 tests passed</span>
+    <span class="badge">mvn test exit code 0</span>
+    <span class="badge">Realm: api-testing</span>
+    <span class="badge">Keycloak 26.7.3</span>
+  </div>
+</header>
+
+<main>
+
+  <div class="card">
+    <h2><span class="num">1</span>Environment Setup</h2>
+    <table>
+      <thead><tr><th>Tool</th><th>Initial State</th><th>Action Taken</th></tr></thead>
+      <tbody>
+        <tr><td>Python 3.13.3</td><td>Already installed</td><td>None</td></tr>
+        <tr><td>Java 17 (Homebrew OpenJDK)</td><td>Already installed</td><td>None</td></tr>
+        <tr><td>Docker</td><td>Missing</td><td><code>brew install --cask docker</code>, launched with <code>open -a Docker</code></td></tr>
+        <tr><td>Maven 3.9.16</td><td>Missing</td><td><code>brew install maven</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">2</span>Keycloak Configuration</h2>
+    <div class="grid-2">
+      <div class="kv">
+        <div><b>Container:</b> <span class="mono">keycloak</span> (image <span class="mono">quay.io/keycloak/keycloak:26.7.3</span>)</div>
+        <div><b>Port:</b> <span class="mono">127.0.0.1:8080</span></div>
+        <div><b>Admin login:</b> <span class="mono">admin / admin</span></div>
+        <div><b>Realm:</b> <span class="mono">api-testing</span> (created via Admin REST API)</div>
+      </div>
+      <div class="kv">
+        <div><b>Client 1:</b> <span class="mono">api-automation-client</span></div>
+        <div>Confidential, service account on, role <span class="mono">api-user</span> assigned</div>
+        <div>Access-token lifespan overridden to <b>6s</b> (expiry test)</div>
+        <div><b>Client 2:</b> <span class="mono">api-automation-client-norole</span></div>
+        <div>Confidential, service account on, <b>no role</b> (403 test)</div>
+      </div>
+    </div>
+    <p style="color:var(--muted); font-size:13px; margin-top:14px;">
+      Client secrets are generated by Keycloak and only ever held as shell env vars
+      (<span class="mono">CLIENT_ID</span>, <span class="mono">CLIENT_SECRET</span>,
+      <span class="mono">CLIENT_ID_NOROLE</span>, <span class="mono">CLIENT_SECRET_NOROLE</span>) —
+      never written to disk or logged in full.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">3</span>Files Created / Modified</h2>
+    <table>
+      <thead><tr><th>File</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">api/requirements.txt</td><td>fastapi, uvicorn, pyjwt[crypto]</td></tr>
+        <tr><td class="mono">api/app.py</td><td>FastAPI <span class="mono">/users</span> endpoint with real JWT validation: signature via Keycloak JWKS (<span class="mono">PyJWKClient</span>), issuer check, audience check, expiry check, realm-role check (403 if missing)</td></tr>
+        <tr><td class="mono">rest-assured/pom.xml</td><td>rest-assured 5.5.6, junit-jupiter 5.13.4, maven-surefire-plugin 3.2.5</td></tr>
+        <tr><td class="mono">rest-assured/src/test/java/OAuthApiTest.java</td><td>8 JUnit 5 tests covering the full scenario matrix</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">4</span>Test Results <span class="status pass" style="margin-left:8px;"><span class="dot"></span>ALL PASS</span></h2>
+    <table>
+      <thead><tr><th>#</th><th>Test</th><th>Scenario</th><th>Verified Result</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="mono">apiWithoutToken_returns401</td><td>No Authorization header</td><td><b>401</b> — Missing Authorization header</td></tr>
+        <tr><td>2</td><td class="mono">apiWithMalformedToken_returns401</td><td>Garbage bearer token</td><td><b>401</b> — Malformed token</td></tr>
+        <tr><td>3</td><td class="mono">apiWithValidToken_returns200</td><td>Valid token, has role</td><td><b>200</b> — Authenticated successfully</td></tr>
+        <tr><td>4</td><td class="mono">apiWithInsufficientRole_returns403</td><td>Valid token, missing role</td><td><b>403</b> — Missing required role: api-user</td></tr>
+        <tr><td>5</td><td class="mono">apiWithExpiredToken_returns401</td><td>Token used after 8s (lifespan 6s)</td><td><b>401</b> — Token expired</td></tr>
+        <tr><td>6</td><td class="mono">tokenRequestWithWrongClientSecret_returns401</td><td>Correct client_id, wrong secret</td><td><b>401</b> — unauthorized_client</td></tr>
+        <tr><td>7</td><td class="mono">tokenRequestWithInvalidClientId_returns401</td><td>Nonexistent client_id</td><td><b>401</b> — invalid_client</td></tr>
+        <tr><td>8</td><td class="mono">tokenRequestWithUnsupportedGrantType_returns400</td><td>Bogus grant_type</td><td><b>400</b> — unsupported_grant_type</td></tr>
+      </tbody>
+    </table>
+    <pre><code>$ mvn -q test
+exit_code=0   # all 8 tests passed</code></pre>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">5</span>README Step Coverage (1&ndash;19)</h2>
+    <ul class="checklist">
+      <li><span class="tick">&#10003;</span> Steps 1&ndash;5 — Keycloak realm, client, secret, service account (done via Admin REST API)</li>
+      <li><span class="tick">&#10003;</span> Steps 6&ndash;7 — FastAPI project created and started on <span class="mono">:8000</span></li>
+      <li><span class="tick">&#10003;</span> Steps 8&ndash;10 — 401 without token, token fetched, 200 with token (verified live)</li>
+      <li><span class="tick">&#10003;</span> Step 11 — Credentials via env vars only, never hardcoded</li>
+      <li><span class="tick">&#10003;</span> Step 12 — Rest Assured project builds and compiles clean</li>
+      <li><span class="tick">&#10003;</span> Step 13 — All key test-scenario table rows implemented and passing</li>
+      <li><span class="tick">&#10003;</span> Step 14 — 401 vs 403 demonstrated by tests 1&ndash;4</li>
+      <li><span class="tick">&#10003;</span> Steps 15&ndash;18 — Reference/explanation sections, no code required</li>
+      <li><span class="tick">&#10003;</span> Step 19 — Advanced exercise: real JWT validation (signature, issuer, audience, expiry, role) implemented in <span class="mono">app.py</span></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">6</span>How to Reproduce</h2>
+    <pre><code>docker start keycloak
+cd api &amp;&amp; uvicorn app:app --port 8000
+
+# in the same shell, export before testing:
+export CLIENT_ID=api-automation-client
+export CLIENT_SECRET=&lt;from Keycloak Credentials tab&gt;
+export CLIENT_ID_NOROLE=api-automation-client-norole
+export CLIENT_SECRET_NOROLE=&lt;from Keycloak Credentials tab&gt;
+
+cd rest-assured &amp;&amp; mvn test</code></pre>
+  </div>
+
+</main>
+
+<footer>
+  Generated automatically as part of the OAuth API Testing Lab automation session &middot; repo facts and gotchas also saved to
+  <span class="mono">/memories/repo/oauth-lab-setup.md</span> for future runs.
+</footer>
+
+</body>
+</html>

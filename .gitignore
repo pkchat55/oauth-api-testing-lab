@@ -1,0 +1,27 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# --- Java / Maven ---
+target/
+*.class
+*.jar
+
+# --- IDE / editor ---
+.vscode/
+.idea/
+*.iml
+.DS_Store
+
+# --- Secrets / local env ---
+.env
+.env.*
+*.pem
+.keycloak-env
+
+# --- Logs ---
+*.log
